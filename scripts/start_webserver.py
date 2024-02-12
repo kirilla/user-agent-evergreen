@@ -16,7 +16,7 @@ class MyHandler(BaseHTTPRequestHandler):
 
     def handle_endpoint(self, filename):
         user_agent = self.headers.get('User-Agent', 'Unknown')
-        with open(filename, 'a') as file:
+        with open(filename, 'w') as file:
             file.write(user_agent + '\n')
 
         self.send_response(200)
@@ -31,4 +31,3 @@ def run(server_class=HTTPServer, handler_class=MyHandler, port=8080):
 
 if __name__ == '__main__':
     run()
-
