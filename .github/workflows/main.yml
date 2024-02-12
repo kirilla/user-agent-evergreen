@@ -1,0 +1,59 @@
+name: Run browsers
+
+on:
+  #schedule:
+  #  - cron: '33 3 * * *' # Run at 03:33 UTC
+  
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Set up browsers
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          chromium-browser \
+          firefox \
+          microsoft-edge-dev
+
+    - name: Install selenium
+      run: |
+        pip install -U selenium
+
+    - name: Start webserver
+      run: |
+        python3 scripts/start_webserver.py &
+
+    - name: Run browsers
+      run: |
+        python3 scripts/run_browsers.py
+
+    - name: Git status
+      id: check_changes
+      run: |
+        git_status=$(git status --porcelain)
+        if [ -z "$git_status" ]; then
+          echo "No changes to commit."
+          echo "::set-output name=changes::false"
+        else
+          echo "There are changes to commit."
+          echo "::set-output name=changes::true"
+        fi
+
+    - name: Git commit and push
+      if: steps.check_changes.outputs.changes == 'true'
+      run: |
+        git config --global user.name "kirilla"
+        git config --global user.email "jonas@kirilla.se"
+        git add chrome.txt
+        git add edge.txt
+        git add firefox.txt
+        git commit -m "Update user-agents"
+        git push
+        
