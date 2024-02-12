@@ -16,7 +16,7 @@ jobs:
       
     - name: Set up browsers
       run: |
-        # sudo apt update -y && sudo apt upgrade -y
+        sudo apt update -y && sudo apt upgrade -y
         sudo apt install -y \
           chromium-browser \
           firefox \
@@ -30,9 +30,20 @@ jobs:
       run: |
         python3 scripts/start_webserver.py &
 
-    - name: Run browsers
+    - name: Run Chrome
       run: |
-        python3 scripts/run_browsers.py
+        python3 scripts/run_chrome.py
+      continue-on-error: true
+
+    - name: Run Edge
+      run: |
+        python3 scripts/run_edge.py
+      continue-on-error: true
+
+    - name: Run Firefox
+      run: |
+        python3 scripts/run_firefox.py
+      continue-on-error: true
 
     - name: Git status
       id: check_changes
