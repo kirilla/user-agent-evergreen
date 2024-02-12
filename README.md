@@ -10,3 +10,6 @@ The resulting user-agent strings are kinda userless:
 
 The point of the exercise was to get the current user-agent strings of the latest major browser. But since we're running them in headless mode, for the GitHub action, we're getting user-agent strings that say we're in headless mode. So it's a failure. Back to the drawring board.
 
+## So, where's the python package? 🧐
+
+Not much point now, innit?
